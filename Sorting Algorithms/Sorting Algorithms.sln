@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30128.74
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "Sorting Algorithms", "Sorting Algorithms.pyproj", "{E471AEAB-AC8D-4D43-86E6-77496A271B02}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E471AEAB-AC8D-4D43-86E6-77496A271B02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E471AEAB-AC8D-4D43-86E6-77496A271B02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4EA7716A-B799-43AA-8734-89BE202FDE0C}
+	EndGlobalSection
+EndGlobal
