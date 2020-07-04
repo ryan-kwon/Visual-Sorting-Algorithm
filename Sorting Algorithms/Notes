@@ -1,0 +1,3 @@
+Make sure you have:
+matplotlib.pyplot
+matplotlib.animation 
