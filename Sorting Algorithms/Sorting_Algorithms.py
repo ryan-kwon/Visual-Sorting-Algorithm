@@ -3,14 +3,6 @@ import time
 import matplotlib.pyplot as plt
 import matplotlib.animation  as animation
 
-#import itertools
-#import sys
-
-'''What kind of fucking bypass loop is this lol
-import sys
-
-sys.setrecursionlimit(10**6)
-'''
 def swap(array, i, j):
     if i != j:
         array[i], array[j] = array[j], array[i]
@@ -132,9 +124,10 @@ while True:
         def remove(choice):
             return choice.replace(" ", "")
 
-        element = int(input("Enter the number of elements for the array: "))
+        #element = int(input("Enter the number of elements for the array: "))
+        element = 300
         print("(Bubble) Sort, (Merge) Sort, (Quick) Sort, (Insertion) Sort,")
-        print("(Recursive Bubble) Sort, (Selection) Sort")
+        print("(Recursive Bubble) Sort, (Selection) Sort, OR (Quit)")
         choice_msg = "What algorithm do you want to use?: "
         choice = input(choice_msg)
 
@@ -146,22 +139,30 @@ while True:
         if remove(choice.lower()) == "bubble":
             title = "Bubble sort"
             animation_generator = Bubblesort(array)
+            print("\n")
         elif remove(choice.lower()) == "merge":
             title = "Merge sort"
             animation_generator = Mergesort(array, 0, element - 1)
+            print("\n")
         elif remove(choice.lower()) == "quick":
             title = "Quick sort"
             animation_generator = Quicksort(array, 0, element - 1)
+            print("\n")
         elif remove(choice.lower()) == "insertion":
             title = "Insertion sort"
             animation_generator = Insertionsort(array)
+            print("\n")
         elif remove(choice.lower()) == "recursivebubble":
             title = "Recursive bubble sort"
             n = len(array)
             animation_generator = RecursiveBubblesort(array, n)
+            print("\n")
         elif remove(choice.lower()) == "selection":
             title = "Selection sort"
             animation_generator = Selectionsort(array)
+            print("\n")
+        elif remove(choice.lower()) == "quit":
+            break
         else:
             print("That is not a choice\n")
             continue            
@@ -191,8 +192,3 @@ while True:
                                        repeat = False)
         
         plt.show()
-
-    user = input("Run again?(y/n): ")
-    print("\n")
-    if user.lower() == 'n':
-        break
