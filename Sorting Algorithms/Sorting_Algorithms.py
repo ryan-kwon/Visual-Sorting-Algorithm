@@ -1,5 +1,6 @@
 import random
 import time
+import math
 import matplotlib.pyplot as plt
 import matplotlib.animation  as animation
 
@@ -64,21 +65,24 @@ def merge(array, start, mid, end):
         yield array
 
 #Quicksort
-def Quicksort(array, low, high):
-    if low >= high:
-        return
+def QuickPartition(array, low, high):
+    i = (low - 1)
     pivot = array[high]
-    pivotindex = low
 
-    for i in range(low, high):
-        if array[i] < pivot:
-            swap(array, i, pivotindex)
-            pivotindex += 1
+    for j in range(low, high):
+        if array[j] < pivot:
+            i = i + 1
+            array[i], array[j] = array[j], array[i]
+
+    array[i + 1], array[high] = array[high], array[i + 1]
+    return(i + 1)
+def Quicksort(array, low, high):
+    if low < high:
+        pi = QuickPartition(array, low, high)
+
+        yield from Quicksort(array, low, pi - 1)
+        yield from Quicksort(array, pi + 1, high)
         yield array
-    swap(array, high, pivotindex)
-    yield array
-    yield from Quicksort(array, low, pivotindex - 1)
-    yield from Quicksort(array, pivotindex + 1, high)
 
 #Insertion sort
 def Insertionsort(array):
@@ -88,21 +92,6 @@ def Insertionsort(array):
             swap(array, j, j-1)
             j -= 1
             yield array
-
-#Recursive bubble sort
-def RecursiveBubblesort(array, n):
-    if n == 1:
-        return
-
-    for i in range(n - 1):
-        if array[i] > array[i + 1]:
-            array[i], array[i + 1] = array[i + 1], array[i]
-
-    if n - 1 > 1:
-        RecursiveBubblesort(array, n - 1)
-
-    yield array
-    yield from RecursiveBubblesort(array, n -1)
 
 #Selection sort
 def Selectionsort(array):
@@ -117,7 +106,103 @@ def Selectionsort(array):
             yield array
         swap(array, i, mini_element)
         yield array
+        
+#heap sort
+def heapify(array, element, i):
+    high = i
+    left = 2 * i + 1
+    right = 2 * i + 2
 
+    if left < element and array[i] < array[left]:
+        high = left
+    if right < element and array[high] < array[right]:
+        high = right
+
+    swap(array, i, high)
+    if high != i:
+        #array[i], array[high] = array[high], array[i]
+        heapify(array, element, high)
+def Heapsort(array):
+    for i in range(element // 2 - 1, -1, -1):
+        heapify(array, element, i)
+
+    for i in range(element - 1, 0, -1):
+        swap(array, i, 0)
+        #array[i], array[0] = array[0], array[i]
+        heapify(array, i, 0)
+        yield array
+
+#shell sort
+def Shellsort(array):
+    gap = element//2
+
+    while gap > 0:
+        for i in range(gap, element):
+            temporary = array[i]
+
+            j = i
+            while j >= gap and array[j - gap] > temporary:
+                array[j] = array[j - gap]
+                j -= gap
+            array[j] = temporary
+        gap //= 2
+
+        yield array
+
+#comb sort
+def Nextgap(gap):
+    gap = (gap * 10)//13
+    if gap < 1:
+        return 1
+    return gap
+def Combsort(array):
+    gap = element
+    swapped_value = True
+
+    while gap != 1 or swapped_value == 1:
+        gap = Nextgap(gap)
+        swapped_value = False
+
+        for i in range(0, element - gap):
+            if array[i] > array[i + gap]:
+                array[i], array[i + gap] = array[i + gap], array[i]
+                swapped_value = True
+        yield array
+
+#counting sort
+def Countingsort(array):
+    maximum = int(max(array))
+    minimum = int(min(array))
+    range_max_min = maximum - minimum + 1
+
+    count_array = [0 for _ in range(range_max_min)]
+    out_array = [0 for _ in range(element)]
+
+    for i in range(0, element):
+        count_array[array[i] - minimum] += 1
+    for i in range(1, len(count_array)):
+        count_array[i] += count_array[i - 1]
+    for i in range(element - 1, -1, -1):
+        out_array[count_array[array[i] - minimum] - 1] = array[i]
+        count_array[array[i] - minimum] -= 1
+    for i in range(0, element):
+        array[i] = out_array[i]
+    yield array
+
+#Recursive bubble sort
+def RecursiveBubblesort(array, n):
+    if n == 1:
+        return
+
+    for i in range(n - 1):
+        if array[i] > array[i + 1]:
+            array[i], array[i + 1] = array[i + 1], array[i]
+
+    if n - 1 > 1:
+        RecursiveBubblesort(array, n - 1)
+
+    yield array
+    yield from RecursiveBubblesort(array, n - 1)
 
 while True:
     if __name__ == "__main__":
@@ -127,7 +212,9 @@ while True:
         #element = int(input("Enter the number of elements for the array: "))
         element = 300
         print("(Bubble) Sort, (Merge) Sort, (Quick) Sort, (Insertion) Sort,")
-        print("(Recursive Bubble) Sort, (Selection) Sort, OR (Quit)")
+        print("(Selection) Sort, (Heap) Sort, (Shell) Sort, (Comb) Sort,")
+        print("(Bucket) Sort, (Counting) Sort, (Radix) Sort,")
+        print("(Recursive Bubble) Sort, OR (Quit)")
         choice_msg = "What algorithm do you want to use?: "
         choice = input(choice_msg)
 
@@ -152,20 +239,36 @@ while True:
             title = "Insertion sort"
             animation_generator = Insertionsort(array)
             print("\n")
+        elif remove(choice.lower()) == "selection":
+            title = "Selection sort"
+            animation_generator = Selectionsort(array)
+            print("\n")
+        elif remove(choice.lower()) == 'heap':
+            title = 'Heap Sort'
+            animation_generator = Heapsort(array)
+            print("\n")
+        elif remove(choice.lower()) == 'shell':
+            title = "Shell Sort"
+            animation_generator = Shellsort(array)
+            print("\n")
+        elif remove(choice.lower()) == 'comb':
+            title = "Comb Sort"
+            animation_generator = Combsort(array)
+            print("\n")
+        elif remove(choice.lower()) == 'counting':
+            title = "Counting Sort"
+            animation_generator = Countingsort(array)
+            print("\n")
         elif remove(choice.lower()) == "recursivebubble":
             title = "Recursive bubble sort"
             n = len(array)
             animation_generator = RecursiveBubblesort(array, n)
             print("\n")
-        elif remove(choice.lower()) == "selection":
-            title = "Selection sort"
-            animation_generator = Selectionsort(array)
-            print("\n")
         elif remove(choice.lower()) == "quit":
             break
         else:
             print("That is not a choice\n")
-            continue            
+            continue
 
         figure, axis = plt.subplots()
         axis.set_title(title)
