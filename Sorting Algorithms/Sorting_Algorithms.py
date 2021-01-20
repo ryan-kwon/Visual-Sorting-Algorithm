@@ -94,7 +94,7 @@ def Insertionsort(array):
             yield array
 
 #Selection sort
-def Selectionsort(array):
+def Selectionsort(array): #this is completely fucked lmao
     if len(array) == 1:
         return
 
@@ -103,9 +103,8 @@ def Selectionsort(array):
         for j in range(i + 1, len(array)):
             if array[mini_element] > array[j]:
                 mini_element = j
-            yield array
-        swap(array, i, mini_element)
-        yield array
+            swap(array, i, mini_element)
+    yield array
         
 #heap sort
 def heapify(array, element, i):
@@ -169,6 +168,27 @@ def Combsort(array):
                 swapped_value = True
         yield array
 
+#bucket sort
+def Bucketsort(array):
+    bucket = []
+
+    for i in range(len(array)):
+        bucket.append([])
+
+    for j in array:
+        index_bucket = 0
+        bucket[index_bucket].append(j)
+
+    for i in range(len(array)):
+        bucket[i] = sorted(bucket[i])
+
+    k = 0
+    for i in range(len(array)):
+        for j in range(len(bucket[i])):
+            array[k] = bucket[i][j]
+            k += 1
+    yield array
+
 #counting sort
 def Countingsort(array):
     maximum = int(max(array))
@@ -187,6 +207,37 @@ def Countingsort(array):
         count_array[array[i] - minimum] -= 1
     for i in range(0, element):
         array[i] = out_array[i]
+    yield array
+
+#radix sort
+def RadixCountingsort(array, exp1):
+    output_array = [0] * (element)
+    count_array = [0] * (10)
+
+    for i in range(0, element):
+        index = (array[i] / exp1)
+        count_array[int(index % 10)] += 1
+
+    for i in range(1, 10):
+        count_array[i] += count_array[i - 1]
+
+    i = element - 1
+    while i > 0:
+        index = (array[i] / exp1)
+        output_array[count_array[int(index % 10)] - 1] = array[i]
+        count_array[int(index % 10)] -= 1
+        i -= 1
+
+    i = 0
+    for i in range(0, len(array)):
+        array[i] = output_array[i]
+def Radixsort(array):
+    max1 = max(array)
+    exp = 1
+    while max1 / exp > 0:
+        RadixCountingsort(array, exp)
+        exp *= 10
+
     yield array
 
 #Recursive bubble sort
@@ -210,7 +261,7 @@ while True:
             return choice.replace(" ", "")
 
         #element = int(input("Enter the number of elements for the array: "))
-        element = 300
+        element = 500
         print("(Bubble) Sort, (Merge) Sort, (Quick) Sort, (Insertion) Sort,")
         print("(Selection) Sort, (Heap) Sort, (Shell) Sort, (Comb) Sort,")
         print("(Bucket) Sort, (Counting) Sort, (Radix) Sort,")
@@ -255,9 +306,17 @@ while True:
             title = "Comb Sort"
             animation_generator = Combsort(array)
             print("\n")
+        elif remove(choice.lower()) == 'bucket':
+            title = "Bucket Sort"
+            animation_generator = Bucketsort(array)
+            print("\n")
         elif remove(choice.lower()) == 'counting':
             title = "Counting Sort"
             animation_generator = Countingsort(array)
+            print("\n")
+        elif remove(choice.lower()) == 'radix':
+            title = "Radix Sort"
+            animation_generator = Radixsort(array)
             print("\n")
         elif remove(choice.lower()) == "recursivebubble":
             title = "Recursive bubble sort"
