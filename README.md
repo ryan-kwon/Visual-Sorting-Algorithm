@@ -1,6 +1,6 @@
 # Visual-Sorting-Algorithm
-Used matplotlib
+Used matplotlib<br /><br />
 
-Make sure you have:
-matplotlib.pyplot
+Make sure you have:<br />
+matplotlib.pyplot<br />
 matplotlib.animation 
